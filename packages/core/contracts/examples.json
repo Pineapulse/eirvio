@@ -1,0 +1,177 @@
+{
+  "scene": {
+    "sceneId": "main",
+    "kind": "canonical",
+    "ruleset": "toy.counter",
+    "rulesVersion": "1",
+    "stateSchemaVersion": "1",
+    "sceneRevision": 0,
+    "state": {
+      "value": 0
+    }
+  },
+  "command": {
+    "protocolVersion": "0.1.0",
+    "commandId": "move-1",
+    "runtimeId": "toy-runtime",
+    "target": {
+      "sceneId": "main"
+    },
+    "operation": "counter.add",
+    "arguments": {
+      "amount": 1
+    },
+    "guards": {
+      "runtimeFence": "fence-1",
+      "expectedSceneRevision": 0,
+      "scopeId": "coach",
+      "scopeEpoch": 0,
+      "view": {
+        "viewId": "board",
+        "viewEpoch": 0,
+        "interactionRevision": 0
+      }
+    }
+  },
+  "sequence": {
+    "protocolVersion": "0.1.0",
+    "sequenceId": "sequence-1",
+    "runtimeId": "toy-runtime",
+    "sceneId": "main",
+    "guards": {
+      "runtimeFence": "fence-1",
+      "expectedSceneRevision": 0,
+      "scopeId": "coach",
+      "scopeEpoch": 0,
+      "view": {
+        "viewId": "board",
+        "viewEpoch": 0,
+        "interactionRevision": 0
+      }
+    },
+    "steps": [
+      {
+        "id": "change",
+        "kind": "invoke",
+        "operation": "counter.add",
+        "arguments": {
+          "amount": 1
+        },
+        "expectedRevision": 0
+      },
+      {
+        "id": "show",
+        "kind": "effect",
+        "effectKind": "toy.show",
+        "parameters": {
+          "label": "One"
+        },
+        "revisionFromStep": "change"
+      },
+      {
+        "id": "visible",
+        "kind": "wait",
+        "effectStepId": "show",
+        "layer": "presentation.reconciled",
+        "timeoutTicks": 5,
+        "timeoutPolicy": "degrade"
+      },
+      {
+        "id": "done",
+        "kind": "finish"
+      }
+    ]
+  },
+  "control": {
+    "protocolVersion": "0.1.0",
+    "operationId": "stop-1",
+    "runtimeId": "toy-runtime",
+    "action": "interrupt",
+    "runtimeFence": "fence-1",
+    "expectedControlRevision": 0,
+    "scopeId": "coach",
+    "scopeEpoch": 0
+  },
+  "outcome": {
+    "protocolVersion": "0.1.0",
+    "operationId": "move-1",
+    "status": "committed",
+    "eventCursor": 1,
+    "sceneId": "main",
+    "previousRevision": 0,
+    "sceneRevision": 1,
+    "result": {
+      "value": 1
+    }
+  },
+  "effect": {
+    "protocolVersion": "0.1.0",
+    "effectId": "sequence-1/show",
+    "runtimeId": "toy-runtime",
+    "sequenceId": "sequence-1",
+    "stepId": "show",
+    "sceneId": "main",
+    "sceneRevision": 1,
+    "runtimeFence": "fence-1",
+    "scopeId": "coach",
+    "scopeEpoch": 0,
+    "view": {
+      "viewId": "board",
+      "viewEpoch": 0,
+      "interactionRevision": 0
+    },
+    "kind": "toy.show",
+    "parameters": {
+      "label": "One"
+    },
+    "status": "pending",
+    "system": false
+  },
+  "receipt": {
+    "protocolVersion": "0.1.0",
+    "receiptId": "receipt-1",
+    "runtimeId": "toy-runtime",
+    "effectId": "sequence-1/show",
+    "sceneId": "main",
+    "sceneRevision": 1,
+    "runtimeFence": "fence-1",
+    "scopeId": "coach",
+    "scopeEpoch": 0,
+    "view": {
+      "viewId": "board",
+      "viewEpoch": 0,
+      "interactionRevision": 0
+    },
+    "layer": "presentation.reconciled",
+    "status": "completed",
+    "presentationMode": "reduced_motion"
+  },
+  "observation": {
+    "protocolVersion": "0.1.0",
+    "observationId": "observation-1",
+    "runtimeId": "toy-runtime",
+    "sceneId": "main",
+    "sceneKind": "canonical",
+    "sceneRevision": 0,
+    "runtimeFence": "fence-1",
+    "controlRevision": 0,
+    "scope": {
+      "id": "coach",
+      "epoch": 0,
+      "status": "active"
+    },
+    "view": {
+      "viewId": "board",
+      "viewEpoch": 0,
+      "interactionRevision": 0
+    },
+    "eventCursor": 0,
+    "projection": {
+      "value": 0
+    },
+    "capabilities": [
+      "counter.add"
+    ],
+    "partial": true
+  }
+}

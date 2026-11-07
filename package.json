@@ -1,0 +1,58 @@
+{
+  "name": "eirvio",
+  "version": "0.1.0",
+  "description": "Event-Instrumented Runtime for Verified Interface Operations: a provider-independent agent/UI SDK.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./packages/sdk/src/index.d.mts",
+      "import": "./packages/sdk/src/index.mjs"
+    },
+    "./host": {
+      "types": "./packages/sdk/src/host.d.mts",
+      "import": "./packages/sdk/src/host.mjs"
+    },
+    "./core": {
+      "types": "./packages/core/src/index.d.mts",
+      "import": "./packages/core/src/index.mjs"
+    },
+    "./contracts/*": "./packages/core/contracts/*"
+  },
+  "files": [
+    "packages/sdk/src",
+    "packages/core/src",
+    "packages/core/contracts",
+    "docs",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test packages/core/test/*.test.mjs packages/sdk/test/*.test.mjs test/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "demo": "node examples/task-board/demo.mjs",
+    "start": "node examples/task-board/server.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "keywords": [
+    "agents",
+    "user-interface",
+    "interaction",
+    "events",
+    "sdk",
+    "runtime"
+  ],
+  "devDependencies": {
+    "typescript": "7.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pineapulse/eirvio.git"
+  },
+  "homepage": "https://github.com/Pineapulse/eirvio#readme",
+  "bugs": {
+    "url": "https://github.com/Pineapulse/eirvio/issues"
+  }
+}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EIRVIO · Interaction workbench</title><link rel="stylesheet" href="/styles.css"><script type="module" src="/app.mjs"></script></head>
+<body>
+<header><a class="brand" href="/">EIRVIO <span>interaction workbench</span></a><span class="local">● Local demo · no external services</span></header>
+<main>
+  <div class="intro"><p class="eyebrow">ONE INTERFACE. SHARED CONTEXT.</p><h1>Make your interface<br>understandable to agents.</h1><p>Publish meaningful events. Discover allowed actions. Execute against the state you actually observed.</p></div>
+  <div class="workspace">
+    <section class="panel board"><div class="panel-heading"><div><p class="eyebrow">01 / YOUR INTERFACE</p><h2>Launch checklist</h2></div><span id="revision" class="pill">Connecting</span></div>
+      <p class="hint">Select a task to publish a UI event, then complete it yourself or let the scripted agent act.</p><div id="tasks" class="tasks" aria-label="Tasks"></div>
+      <div class="actions"><button id="complete" disabled>Complete selected task</button><button id="agent" class="secondary" disabled>Run scripted agent</button></div>
+      <p id="result" role="status" aria-live="polite">Connecting to the trusted host…</p>
+      <details><summary>Try reliability controls</summary><p class="hint">These controls demonstrate concurrency, retries and interruption. They use disposable in-memory data.</p><div class="actions"><button id="retry" class="secondary" disabled>Retry exact last command</button><button id="stale" class="secondary" disabled>Try stale observation</button><button id="recover" class="secondary" disabled>Look up last outcome</button><button id="refresh" class="secondary">Refresh observation</button><button id="interrupt" class="secondary" disabled>Interrupt current scope</button></div><label><input type="checkbox" id="lose-reply"> Simulate a lost reply on the next command</label></details>
+    </section>
+    <section class="panel agent"><div class="panel-heading"><div><p class="eyebrow">02 / AGENT CONTRACT</p><h2>Discover, then act</h2></div><span class="pill purple">Provider independent</span></div>
+      <p class="hint">This demo agent is a small deterministic function. Replace it with your own agent loop without changing the interface contract.</p>
+      <h3>Available action</h3><pre id="catalog" aria-label="Action catalog"></pre><h3>Observed state</h3><pre id="projection" aria-label="Current projected state"></pre>
+      <p class="boundary">Events describe what happened. Only an authorized command can change state.</p>
+    </section>
+    <section class="panel timeline"><div class="panel-heading"><div><p class="eyebrow">03 / EVENT STREAM</p><h2>Every interaction has context</h2></div><span id="event-count" class="pill">0 events</span></div><p class="hint">Event name + declared properties, with actor and correlation context. Memory only; nothing is sent to analytics platforms.</p><ol id="events" aria-label="Interaction event history"><li class="empty">Select a task to publish your first event.</li></ol></section>
+  </div>
+  <footer>Early SDK preview · In-memory state resets when the server restarts · <a href="https://github.com/Pineapulse/eirvio" rel="noreferrer">Source on GitHub</a></footer>
+</main>
+</body></html>
