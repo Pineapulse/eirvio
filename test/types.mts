@@ -1,4 +1,4 @@
-import {createInteractionClient, createEventStream, SDK_EVENT_CATALOG, type Command} from 'eirvio';
+import {createInteractionClient, createEventStream, SDK_EVENT_CATALOG, createInterfaceAwareness, type Command, type AwarenessCursor} from 'eirvio';
 import {createInteractionHost} from 'eirvio/host';
 import {Runtime, Registry, MemoryStore} from 'eirvio/core';
 
@@ -24,3 +24,19 @@ client.prepare('counter.add', {amount:1});
 events.track('ui.selected', {id:'one'}, {actor:'administrator'});
 // @ts-expect-error global administrative controls are not a client capability
 client.prepareControl('recover', {observation:basis, operationId:'typed-2'});
+
+const awareness = createInterfaceAwareness({events, surface:{id:'board',kind:'game'},
+  contextSchema:{properties:{selectedId:{type:'string'}},required:['selectedId']}, initialContext:{selectedId:''}});
+awareness.updateContext({selectedId:'piece-1'});
+const snapshot = awareness.snapshot();
+const cursor: AwarenessCursor = snapshot.nextCursor;
+awareness.snapshot({after:cursor,limit:1});
+const unsubscribe = awareness.subscribe(notification => {
+  if(notification.type==='activity') console.log(notification.event.name);
+  else console.log(notification.contextRevision, notification.context);
+});
+unsubscribe(); awareness.dispose();
+// @ts-expect-error a resume cursor must be tied to its awareness instance
+awareness.snapshot({after:1});
+// @ts-expect-error surface kind is a declared portable interface type
+createInterfaceAwareness({events,surface:{id:'x',kind:'unknown'},contextSchema:{properties:{}},initialContext:{}});

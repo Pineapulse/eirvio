@@ -1,7 +1,7 @@
 {
   "name": "eirvio",
-  "version": "0.1.0",
-  "description": "Event-Instrumented Runtime for Verified Interface Operations: a provider-independent agent/UI SDK.",
+  "version": "0.2.0",
+  "description": "Let agents act in your interface and stay aware of user interactions through declared events and guarded actions.",
   "type": "module",
   "license": "MIT",
   "engines": {

@@ -1,4 +1,33 @@
-# SDK API 0.1.0
+# SDK API 0.2.0
+
+## Interface awareness
+
+`createInterfaceAwareness({events, surface, contextSchema, initialContext, awarenessId?, maxListeners=100, onListenerError?})` creates a browser-safe, synchronous local awareness source. It observes the supplied stream and retains current app-declared context. It does not execute actions, read interface controls automatically, or open a network connection.
+
+`surface` is `{id, kind: 'website'|'game'|'app', name?}`. `contextSchema` uses the same closed `EventDefinition` dialect as events. Initial context and replacements are plain JSON objects bounded to 16 KiB and depth 8. `awarenessId` defaults to `crypto.randomUUID()`; environments without it must provide a unique ID per instance lifetime. Maximum listener count is configurable from 1 to 10,000.
+
+`updateContext(replacement)` validates and replaces the entire context, increments `contextRevision`, notifies subscribers and returns a detached `{context, contextRevision}`. Rejected updates change neither current context nor revision. A context change does not append a source event; its revision is independent of source event cursors.
+
+`snapshot({after?, limit?})` returns:
+
+| Field | Meaning |
+| --- | --- |
+| `awarenessId`, `surface` | Identity of this local awareness instance and interface |
+| `context`, `contextRevision` | Current declared context; not historical context for each activity |
+| `activities` | Events in the scanned page whose descriptive actor is `user` |
+| `nextCursor` | `{awarenessId, cursor}` identifying the last source event scanned |
+| `sourceHead`, `oldestCursor` | Source head and oldest retained event cursor |
+| `gap`, `hasMore` | Whether older history was evicted and whether more source entries remain |
+
+Omit `after` to start from cursor 0. Resume with the preceding `nextCursor`. `limit` counts source entries scanned, including filtered agent/system events; an empty activity page can have `hasMore:true`. Omit it to use the source stream's default, or supply a positive count no greater than its `maxEvents`. A cursor from a different instance rejects with `AWARENESS_CURSOR_MISMATCH`; malformed or future cursors reject with `INVALID_AWARENESS_CURSOR`. Gaps require resynchronization using current context and a fresh host observation.
+
+`subscribe(listener)` returns an unsubscribe function. Notifications are `{type:'activity', awarenessId, event}` or `{type:'context_changed', awarenessId, contextRevision, context}`. Each listener gets detached data. Synchronous throws and promise rejections are isolated and optionally reported through `onListenerError(error, details)`. Register before taking a snapshot when combining replay with live delivery; buffer and deduplicate overlapping activity by `(awarenessId, event.cursor)` and context by revision. See the [integration guide](integration.md).
+
+Reads during notifications are permitted. Reentrant context writes reject with `AWARENESS_REENTRANCY`. If a context listener explicitly publishes to the independently owned source stream, a nested activity notification is isolated/reported to avoid recursion; the event remains readable in snapshot history. Schedule follow-up work outside synchronous notification delivery. This is a local observer, not a durable or exactly-once queue.
+
+`dispose()` is idempotent, releases its upstream subscription and clears its own listeners. Later reads, updates and subscriptions reject with `AWARENESS_DISPOSED`. It does not dispose the shared event stream or cancel promises already running in application listeners.
+
+Awareness grants no authority and does not advance runtime/view guards. Use the existing client/host for actions and trusted view binding for selection-sensitive freshness. Actor labels filter metadata; they do not prove who performed an action.
 
 ## Events
 
@@ -46,6 +75,6 @@ Outcome lookup protects an instance-local set of IDs admitted through that host.
 
 ## Versioning and state
 
-The SDK release and the native wire protocol are both `0.1.0`, but are separate version contracts. This pre-1.0 SDK may change through minor releases. Raw core JSON schemas are in `eirvio/contracts/schemas.json`; the core validator supports only the keywords used by that packet.
+The SDK release is `0.2.0`; the native wire protocol remains `0.1.0`. They are separate version contracts. This pre-1.0 SDK may change through minor releases. Raw core JSON schemas are in `eirvio/contracts/schemas.json`; the core validator supports only the keywords used by that packet.
 
 The native kernel is synchronous and uses Node's hashing primitive. Import the browser client through `eirvio`; import the host or core only into trusted Node code. Browser and host share JSON contracts, not administrative process objects.
