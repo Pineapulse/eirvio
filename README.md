@@ -6,6 +6,10 @@ Give your agent structured eyes and actions inside your website or Babylon.js ga
 
 **Early release · MIT · JavaScript ESM + TypeScript declarations.** The automatic adapters run in the browser. They do not require an EIRVIO server, model account or analytics service. The optional transactional host requires Node.js 22 or newer.
 
+Read the [architecture explainer](docs/architecture.md) for components, interaction flows and optional integrations. Open the full diagram below for a closer view.
+
+[![EIRVIO architecture: automatic browser adapters, optional application integrations and development labs](docs/diagrams/eirvio-architecture.svg)](docs/diagrams/eirvio-architecture.svg)
+
 ## Install in a website
 
 ```sh

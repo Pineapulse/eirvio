@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1540" height="1430" viewBox="0 0 1540 1430" role="img" aria-labelledby="title desc">
+<title id="title">EIRVIO architecture</title><desc id="desc">EIRVIO v0.3.1. An automatic browser path connects a website or Babylon scene to an existing agent through an adapter and shared surface kernel. Declared awareness and authoritative domain operations are optional separate integrations. Isolated testing and learning labs validate changes during development.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#456477"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172d3d} .title{font-weight:700} .muted{fill:#526777}</style>
+<rect width="1540" height="1430" fill="#fff"/>
+<text x="44" y="60.0" font-size="42" text-anchor="start" font-weight="700">EIRVIO architecture</text>
+<text x="44" y="99.0" font-size="23" text-anchor="start" style="fill:#526777">Event Instrumented Runtime for Verified Interface Operations</text>
+<text x="1496" y="57.0" font-size="23" text-anchor="end" font-weight="700">v0.3.1</text>
+<text x="1496" y="93.0" font-size="19" text-anchor="end" style="fill:#526777">7 November 2026</text>
+<text x="44" y="145.0" font-size="24" text-anchor="start">Two jobs: give an agent supported interface actions and awareness of user activity.</text>
+<rect x="36" y="182" width="996" height="405" rx="18" fill="#f1f8f5" stroke="#7aa997" stroke-width="2"/>
+<text x="58" y="220.0" font-size="20" text-anchor="start" font-weight="700" style="fill:#2b6752">AUTOMATIC PATH   •   INSIDE THE BROWSER</text>
+<text x="58" y="254.0" font-size="20" text-anchor="start">Install one adapter after your page or scene exists. No EIRVIO server is required.</text>
+<rect x="58" y="281" width="270" height="218" rx="14" fill="#fff" stroke="#b9cbd3" stroke-width="2"/>
+<text x="78" y="318.0" font-size="25" text-anchor="start" font-weight="700">Your interface</text>
+<text x="78" y="357.0" font-size="23" text-anchor="start">Website DOM</text>
+<text x="78" y="389.65999999999997" font-size="23" text-anchor="start">or Babylon.js scene</text>
+<text x="78" y="435.0" font-size="20" text-anchor="start" style="fill:#526777">Existing user controls,</text>
+<text x="78" y="463.4" font-size="20" text-anchor="start" style="fill:#526777">rendering and handlers</text>
+<rect x="374" y="281" width="270" height="218" rx="14" fill="#fff" stroke="#b9cbd3" stroke-width="2"/>
+<text x="394" y="318.0" font-size="25" text-anchor="start" font-weight="700">Interface adapter</text>
+<text x="394" y="357.0" font-size="23" text-anchor="start">installWeb</text>
+<text x="394" y="389.65999999999997" font-size="23" text-anchor="start">installBabylon</text>
+<text x="394" y="435.0" font-size="20" text-anchor="start" style="fill:#526777">Discover • sample • act</text>
+<text x="394" y="463.4" font-size="20" text-anchor="start" style="fill:#526777">Capture user activity</text>
+<rect x="690" y="281" width="320" height="218" rx="14" fill="#fff" stroke="#b9cbd3" stroke-width="2"/>
+<text x="710" y="318.0" font-size="24" text-anchor="start" font-weight="700">Shared surface kernel</text>
+<text x="710" y="357.0" font-size="20" text-anchor="start">Target and revision checks</text>
+<text x="710" y="385.4" font-size="20" text-anchor="start">Request ID and receipt ledger</text>
+<text x="710" y="413.8" font-size="20" text-anchor="start">Bounded event history</text>
+<text x="710" y="467.0" font-size="21" text-anchor="start" font-weight="700">Common agent tools</text>
+<path d="M335 382 L367 382" fill="none" stroke="#456477" stroke-width="3" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<path d="M651 382 L683 382" fill="none" stroke="#456477" stroke-width="3" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="58" y="540.0" font-size="19" text-anchor="start">Actions flow toward the interface. Observations, activity and receipts flow toward the agent.</text>
+<text x="58" y="568.0" font-size="18" text-anchor="start" style="fill:#526777">In memory for one adapter lifetime. A dispatched action is not proof of application success.</text>
+<rect x="1092" y="182" width="412" height="405" rx="18" fill="#f1f6fc" stroke="#88a7c3" stroke-width="2"/>
+<text x="1114" y="220.0" font-size="20" text-anchor="start" font-weight="700" style="fill:#345e82">APPLICATION OWNED</text>
+<text x="1114" y="270.0" font-size="25" text-anchor="start" font-weight="700">Existing agent integration</text>
+<text x="1114" y="312.0" font-size="21" text-anchor="start">Map tool descriptors</text>
+<text x="1114" y="341.82" font-size="21" text-anchor="start">Route tool calls and results</text>
+<text x="1114" y="371.64" font-size="21" text-anchor="start">Forward activity into context</text>
+<text x="1114" y="435.0" font-size="21" text-anchor="start" font-weight="700">Your agent decides what to do</text>
+<text x="1114" y="477.0" font-size="20" text-anchor="start" style="fill:#526777">Model, permissions and remote</text>
+<text x="1114" y="505.4" font-size="20" text-anchor="start" style="fill:#526777">transport belong to your app.</text>
+<text x="1114" y="552.0" font-size="21" text-anchor="start">No agent loop is bundled.</text>
+<path d="M1040 366 L1084 366" fill="none" stroke="#456477" stroke-width="3" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="44" y="631.0" font-size="21" text-anchor="start" font-weight="700">Tool bridge</text>
+<text x="190" y="631.0" font-size="22" text-anchor="start">surface_observe   •   surface_act   •   surface_get_outcome</text>
+<text x="44" y="666.0" font-size="21" text-anchor="start" font-weight="700">Activity bridge</text>
+<text x="225" y="666.0" font-size="22" text-anchor="start">subscribe()   •   observe().activity   •   history()</text>
+<rect x="36" y="711" width="575" height="305" rx="18" fill="#faf8ff" stroke="#b6a8d5" stroke-width="2"/>
+<text x="58" y="751.0" font-size="20" text-anchor="start" font-weight="700" style="fill:#69558a">OPTIONAL   •   DECLARED AWARENESS</text>
+<text x="58" y="790.0" font-size="22" text-anchor="start">Your app publishes schema checked events</text>
+<text x="58" y="821.24" font-size="22" text-anchor="start">and supplies explicit current context.</text>
+<text x="58" y="870.0" font-size="23" text-anchor="start" font-weight="700">Declared events  →  Interface awareness</text>
+<text x="58" y="908.0" font-size="23" text-anchor="start" font-weight="700">→  Your agent context queue</text>
+<text x="58" y="963.0" font-size="19" text-anchor="start" style="fill:#526777">A separate API from automatic adapter history.</text>
+<text x="58" y="989.98" font-size="19" text-anchor="start" style="fill:#526777">Context is information, not action permission.</text>
+<rect x="639" y="711" width="865" height="305" rx="18" fill="#fff9ef" stroke="#cbb28a" stroke-width="2"/>
+<text x="661" y="751.0" font-size="20" text-anchor="start" font-weight="700" style="fill:#866233">OPTIONAL   •   AUTHORITATIVE DOMAIN OPERATIONS</text>
+<text x="661" y="792.0" font-size="22" text-anchor="start">Application defined commands and business or game rules</text>
+<text x="661" y="849.0" font-size="22" text-anchor="start" font-weight="700">Interaction client  ↔  App transport  ↔  Trusted Node host</text>
+<text x="661" y="891.0" font-size="24" text-anchor="start" font-weight="700">Host  ↔  Core runtime and MemoryStore</text>
+<text x="661" y="938.0" font-size="20" text-anchor="start">Trusted permissions • domain validation • state transitions • effects</text>
+<text x="661" y="980.0" font-size="20" text-anchor="start" style="fill:#526777">Separate wiring. Node 22+. In memory; no crash durability.</text>
+<rect x="36" y="1054" width="1468" height="288" rx="18" fill="#f7f9fb" stroke="#acb9c4" stroke-width="2"/>
+<text x="58" y="1095.0" font-size="20" text-anchor="start" font-weight="700" style="fill:#526777">DEVELOPMENT ONLY   •   TEST AND IMPROVE</text>
+<rect x="58" y="1121" width="380" height="116" rx="14" fill="#fff" stroke="#b9cbd3" stroke-width="2"/>
+<text x="78" y="1156.0" font-size="24" text-anchor="start" font-weight="700">21 isolated scenarios</text>
+<text x="78" y="1191.0" font-size="20" text-anchor="start">Fresh DOM, Babylon NullEngine</text>
+<text x="78" y="1219.4" font-size="20" text-anchor="start">and shared kernel fixtures</text>
+<rect x="491" y="1121" width="448" height="116" rx="14" fill="#fff" stroke="#b9cbd3" stroke-width="2"/>
+<text x="511" y="1156.0" font-size="24" text-anchor="start" font-weight="700">Evaluation runner</text>
+<text x="511" y="1191.0" font-size="20" text-anchor="start">Testing: current code</text>
+<text x="511" y="1219.4" font-size="20" text-anchor="start">Learning: pinned baseline vs current</text>
+<rect x="992" y="1121" width="490" height="116" rx="14" fill="#fff" stroke="#b9cbd3" stroke-width="2"/>
+<text x="1012" y="1156.0" font-size="23" text-anchor="start" font-weight="700">Local reports and developer fixes</text>
+<text x="1012" y="1191.0" font-size="20" text-anchor="start">Seeds • case results • source hashes</text>
+<text x="1012" y="1219.4" font-size="20" text-anchor="start">Keep regression cases and rerun</text>
+<path d="M448 1180 L481 1180" fill="none" stroke="#456477" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M949 1180 L982 1180" fill="none" stroke="#456477" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="58" y="1277.0" font-size="21" text-anchor="start">CI runs the test suite and testing lab on Node 22 and 24. Learning comparisons are run on demand.</text>
+<text x="58" y="1313.0" font-size="20" text-anchor="start">Release evidence: 154 tests passed   •   Seed 73: baseline 48/63 → candidate 63/63   •   Five scenarios improved</text>
+<text x="44" y="1381.0" font-size="19" text-anchor="start" style="fill:#526777">Current boundaries: supported DOM semantics and Babylon presentation actions; no screenshots, model training or analytics service.</text>
+<text x="44" y="1411.0" font-size="18" text-anchor="start" style="fill:#526777">Source: github.com/Pineapulse/eirvio   •   Full integration and outcome details: docs/architecture.md</text>
+</svg>

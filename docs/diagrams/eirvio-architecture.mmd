@@ -1,0 +1,93 @@
+%% EIRVIO v0.3.1 — editable architecture overview.
+%% Automatic adapters do not call the optional domain client, host or core.
+%% The development lab is separate from application runtime and agent execution.
+flowchart TB
+  subgraph INTEGRATION["Application-owned agent integration"]
+    direction LR
+    AGENT["Existing agent<br/>reasoning and scheduling"]
+    MAPPING["Application tool mapping<br/>framework descriptors and call dispatch<br/>remote transport and authorization, if needed"]
+    QUEUE["Application context queue<br/>batch, filter and deduplicate observations"]
+    AGENT <-->|"tool calls and JSON results"| MAPPING
+    QUEUE -->|"activity and current context"| AGENT
+  end
+
+  subgraph AUTOMATIC["Automatic path — browser only; no EIRVIO host or server required"]
+    direction LR
+    DOM["Website DOM<br/>supported semantic content and controls"]
+    SCENE["Existing Babylon scene<br/>supported meshes and active camera"]
+    WEB["installWeb({root})<br/>stable element references<br/>click, fill, select, check, focus, scroll"]
+    BABYLON["installBabylon({scene})<br/>stable object references<br/>camera focus and bounding-box highlight"]
+    KERNEL["Shared surface kernel<br/>fresh sampling and revision checks<br/>argument preflight before effects<br/>request identity and lifecycle guards"]
+    API["Common public interface<br/>surface_observe · surface_act · surface_get_outcome<br/>observe · act · getOutcome · tools · callTool"]
+    LEDGER["Bounded in-memory receipts<br/>exact request retry returns retained result<br/>full ledger rejects new requests<br/>reload/reinstall loses prior lifetime"]
+    ACTIVITY["Bounded activity feed<br/>subscribe · history · observe().activity<br/>user / agent / system attribution<br/>cursors and eviction gaps"]
+    DOM <-->|"sample semantics / dispatch native effects"| WEB
+    SCENE <-->|"sample objects / dispatch presentation effects"| BABYLON
+    WEB <--> KERNEL
+    BABYLON <--> KERNEL
+    KERNEL <--> API
+    KERNEL <--> LEDGER
+    WEB -->|"DOM interaction metadata"| ACTIVITY
+    BABYLON -->|"pointer and camera observations"| ACTIVITY
+    KERNEL -->|"action outcome metadata"| ACTIVITY
+  end
+  MAPPING <-->|"three portable tools"| API
+  ACTIVITY -->|"application forwards relevant events"| QUEUE
+
+  subgraph AWARENESS["Optional declared awareness — explicit application instrumentation"]
+    direction LR
+    HANDLERS["Application event handlers<br/>explicit semantic events and context updates"]
+    STREAM["createEventStream<br/>closed property schemas<br/>bounded local history"]
+    AWARE["createInterfaceAwareness<br/>current context + retained user activity<br/>independent context revision and lifetime cursor"]
+    HANDLERS -->|"track(name, properties, context)"| STREAM
+    STREAM --> AWARE
+    HANDLERS -->|"updateContext(replacement)"| AWARE
+  end
+  AWARE -. "optional snapshots and notifications" .-> QUEUE
+
+  subgraph DOMAIN["Optional authoritative domain path — separately integrated; no automatic-adapter routing"]
+    direction LR
+    CLIENT["Interaction client<br/>observe, catalog, prepare, submit<br/>exact native command guards"]
+    TRANSPORT["Application-owned transport<br/>local binding or authenticated remote bridge"]
+    HOST["Trusted Node host<br/>fresh trusted permissions<br/>scene / scope / view boundary"]
+    CORE["Core domain runtime<br/>registered rules and transactions<br/>scopes, effects, receipts and replay"]
+    STORE["MemoryStore<br/>atomic in-process state and outcomes<br/>no disk or crash durability"]
+    RENDER["Application-owned rendering and effect delivery<br/>project domain state; handle declared effects<br/>report delivery receipts"]
+    CLIENT <--> TRANSPORT
+    TRANSPORT <--> HOST
+    HOST <--> CORE
+    CORE <--> STORE
+    CORE <-->|"state, effect intents and delivery receipts"| RENDER
+  end
+  AGENT -. "explicitly registered domain operations" .-> CLIENT
+  RENDER -. "application integration" .-> DOM
+  RENDER -. "application integration" .-> SCENE
+
+  subgraph DEVELOPMENT["Development only — reproducible testing, learning comparisons and CI"]
+    direction LR
+    FIXTURES["21 versioned scenarios<br/>9 jsdom websites · 8 Babylon NullEngine scenes<br/>4 internal kernel fixtures<br/>fresh resources, assertions and seeded inputs"]
+    BASELINE["Pinned released baseline: v0.3.0<br/>1bfad18b9b3af3671c6933e6eba143c146797b22<br/>local tag verified; temporary source extraction"]
+    CANDIDATE["Candidate engine: v0.3.1<br/>source commit, dirty state and module hashes recorded"]
+    RUNNER["Fixed-fixture runner<br/>lab:test: current engine, one round<br/>lab:learn: same cases/seeds, both versions, three rounds<br/>no external model or customer session"]
+    REPORTS["Local JSON reports<br/>passed / failed attempts; bounded evidence<br/>improvements, regressions and unresolved cases<br/>case versions and replayable seeds"]
+    DASHBOARDS["Local testing and learning dashboards<br/>ports 8811 / 8812; on-demand isolated runs<br/>recorded seed 73: baseline 48/63, candidate 63/63"]
+    CI["npm run check / GitHub CI<br/>unit and integration tests, declarations<br/>clean-package checks and scenario assertions<br/>v0.3.1 release: 154 tests passed"]
+    REVIEW["Developer feedback loop<br/>reproduce failure → fix source → retain regression<br/>compare again before release<br/>no automatic model training or source modification"]
+    FIXTURES --> RUNNER
+    BASELINE -->|"baseline adapter injection"| RUNNER
+    CANDIDATE -->|"candidate adapter injection"| RUNNER
+    RUNNER --> REPORTS
+    REPORTS --> DASHBOARDS
+    REPORTS --> REVIEW
+    CI -->|"candidate scenario checks"| RUNNER
+    REVIEW -. "developer-authored change" .-> CANDIDATE
+  end
+
+  classDef application fill:#eef2ff,stroke:#6674b8,color:#17213b
+  classDef automatic fill:#e9f6f4,stroke:#39877e,color:#123c37
+  classDef optional fill:#fff4de,stroke:#ad8433,color:#49360f
+  classDef development fill:#f1f3f5,stroke:#7c8794,color:#28313b
+  class AGENT,MAPPING,QUEUE,DOM,SCENE,HANDLERS,TRANSPORT,RENDER application
+  class WEB,BABYLON,KERNEL,API,LEDGER,ACTIVITY automatic
+  class STREAM,AWARE,CLIENT,HOST,CORE,STORE optional
+  class FIXTURES,BASELINE,CANDIDATE,RUNNER,REPORTS,DASHBOARDS,CI,REVIEW development
