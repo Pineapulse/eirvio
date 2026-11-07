@@ -52,7 +52,7 @@ test('the browser transport serves the SDK and preserves lost-reply recovery wit
     return body;
   }
   try {
-    for(const path of ['/','/app.mjs','/styles.css','/sdk/index.mjs','/sdk/client.mjs','/sdk/events.mjs','/sdk/awareness.mjs'])assert.equal((await fetch(origin+path)).status,200,path);
+    for(const path of ['/','/app.mjs','/styles.css','/sdk/index.mjs','/sdk/client.mjs','/sdk/events.mjs','/sdk/awareness.mjs','/sdk/surface.mjs','/sdk/web.mjs','/sdk/babylon.mjs','/task-board','/auto/app.mjs','/auto/game.mjs','/auto/styles.css','/auto/tokens.css'])assert.equal((await fetch(origin+path)).status,200,path);
     for(const path of ['/sdk/host.mjs','/packages/core/src/store.mjs','/.env'])assert.equal((await fetch(origin+path)).status,404,path);
     assert.equal((await fetch(origin+'/api/rpc',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,403);
     const client=createInteractionClient({transport:Object.fromEntries(['observe','catalog','submit','getOutcome','control'].map(method=>[method,(...args)=>rpc(method,...args)]))});

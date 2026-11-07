@@ -40,3 +40,21 @@ unsubscribe(); awareness.dispose();
 awareness.snapshot({after:1});
 // @ts-expect-error surface kind is a declared portable interface type
 createInterfaceAwareness({events,surface:{id:'x',kind:'unknown'},contextSchema:{properties:{}},initialContext:{}});
+
+// Automatic browser adapters remain usable without a host or model dependency.
+import {installWeb as installDom} from 'eirvio/web';
+import {installBabylon as installScene} from 'eirvio/babylon';
+import type {SurfaceAdapter, SurfaceAction, SurfaceReceipt, SurfaceSnapshot} from 'eirvio';
+const pageSurface:SurfaceAdapter=installDom({root:document.body});
+const pageSnapshot:SurfaceSnapshot=pageSurface.observe();
+const uiAction:SurfaceAction={adapterId:pageSnapshot.adapterId,id:'example',revision:pageSnapshot.revision,target:'dom-1',action:'click',arguments:{}};
+const uiReceipt:SurfaceReceipt=pageSurface.act(uiAction);
+pageSurface.callTool('surface_observe',{});
+pageSurface.callTool('surface_act',uiAction);
+pageSurface.callTool('surface_get_outcome',{id:uiReceipt.id});
+pageSurface.subscribe(event=>{const actor:'user'|'agent'|'system'=event.actor;void actor;});
+// @ts-expect-error A surface revision is numeric.
+pageSurface.act({...uiAction,revision:'old'});
+// @ts-expect-error A browser root must be a DOM element.
+installDom({root:'#app'});
+void installScene;

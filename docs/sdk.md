@@ -1,4 +1,6 @@
-# SDK API 0.2.0
+# SDK API 0.3.0
+
+Automatic DOM and Babylon adapters are documented in the [quickstart](quickstart.md); the APIs below cover declared awareness, events and the authoritative host.
 
 ## Interface awareness
 
@@ -75,6 +77,6 @@ Outcome lookup protects an instance-local set of IDs admitted through that host.
 
 ## Versioning and state
 
-The SDK release is `0.2.0`; the native wire protocol remains `0.1.0`. They are separate version contracts. This pre-1.0 SDK may change through minor releases. Raw core JSON schemas are in `eirvio/contracts/schemas.json`; the core validator supports only the keywords used by that packet.
+The SDK release is `0.3.0`; the native wire protocol remains `0.1.0`. They are separate version contracts. This pre-1.0 SDK may change through minor releases. Raw core JSON schemas are in `eirvio/contracts/schemas.json`; the core validator supports only the keywords used by that packet.
 
 The native kernel is synchronous and uses Node's hashing primitive. Import the browser client through `eirvio`; import the host or core only into trusted Node code. Browser and host share JSON contracts, not administrative process objects.

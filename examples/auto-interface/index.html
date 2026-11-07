@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EIRVIO · Eyes without screenshots</title><link rel="stylesheet" href="/auto/styles.css"></head>
+<body>
+<header><a class="wordmark" href="/">eirvio<span> / interface engine</span></a><a href="https://github.com/Pineapulse/eirvio">Open source ↗</a></header>
+<main>
+<section class="intro"><p class="eyebrow">ONE INSTALL. TWO DIRECTIONS.</p><h1>Give your agent<br><em>a sense of the interface.</em></h1><p>See the controls. Understand user interactions. Take action.<br>Structured context, without a single screenshot.</p></section>
+<div class="tabs" role="tablist" aria-label="Interface example"><button id="web-tab" role="tab" aria-selected="true" aria-controls="web-panel">01 &nbsp; Website</button><button id="game-tab" role="tab" aria-selected="false" aria-controls="game-panel">02 &nbsp; Babylon game</button></div>
+<div class="workbench">
+<section class="surface-card"><div class="panel-heading"><span class="status-dot"></span><h2 id="surface-title">Your website</h2><span class="chip">Live interface</span></div>
+<div id="web-panel" role="tabpanel" aria-labelledby="web-tab">
+<div id="website-example" class="website-example">
+<p class="eyebrow">THE LITTLE EXPLORER CLUB</p><h3>Your next adventure starts here.</h3><p>Make an explorer pass. Try the controls yourself, then let the agent help.</p>
+<form id="passport-form"><label for="explorer-name">Explorer name</label><input id="explorer-name" name="explorer" placeholder="What should we call you?" maxlength="80" autocomplete="off" required>
+<label for="destination">Destination</label><select id="destination"><option value="moon">The Moon</option><option value="ocean">The Ocean</option><option value="forest">The Forest</option></select>
+<label class="check"><input id="sound" type="checkbox"> Play adventure sounds</label><button class="primary" type="submit">Create my pass</button></form>
+<p id="passport-result" role="status">Your explorer pass will appear here.</p><div class="private-note" data-eirvio-private><strong>Private space</strong><p>This note is deliberately excluded from the agent’s view.</p></div>
+</div></div>
+<div id="game-panel" role="tabpanel" aria-labelledby="game-tab" hidden><div class="game-stage"><canvas id="game-canvas" aria-label="Three dimensional space playground"></canvas><p>Drag to orbit · Scroll to zoom · Pick an object</p></div><div class="game-caption"><h3>A scene the agent can understand.</h3><p>The adapter reads Babylon objects directly. Try focusing on the Moon or highlighting the rocket.</p></div></div>
+<div class="install-line"><span>Installed with</span><code id="install-code">installWeb({root: page})</code></div>
+</section>
+<aside class="agent-card"><div class="panel-heading"><span class="agent-symbol">✳</span><h2>The agent’s view</h2><span class="chip green">Connected</span></div>
+<div class="agent-inner"><div class="metrics"><div><strong id="target-count">—</strong><span>discovered targets</span></div><div><strong id="event-count">0</strong><span>interactions</span></div><div><strong>0</strong><span>screenshots</span></div></div>
+<h3>Try an agent action</h3><p class="muted">These buttons run a scripted agent through the same tools your own agent would use.</p>
+<div id="web-actions" class="action-buttons"><button data-intent="fill">Fill in “Alex” <span>↗</span></button><button data-intent="select">Choose the Moon <span>↗</span></button><button data-intent="submit">Create the pass <span>↗</span></button></div>
+<div id="game-actions" class="action-buttons" hidden><button data-intent="focus">Focus on the Moon <span>↗</span></button><button data-intent="highlight">Highlight the rocket <span>↗</span></button><button data-intent="clear">Clear the highlight <span>↗</span></button></div>
+<p id="action-result" role="status" class="action-result">Ready when you are.</p>
+<h3>Discovered automatically</h3><ul id="targets" class="target-list"></ul>
+<h3>What just happened</h3><ol id="activity" class="activity"><li class="muted">Use the interface to start the live feed.</li></ol>
+</div></aside>
+</div>
+<details class="data-panel"><summary>Inspect the structured observation</summary><pre id="snapshot"></pre></details>
+<footer><span>No model account needed for this demo. All state stays in this page.</span><a href="/task-board">Advanced guarded-action demo ↗</a></footer>
+</main><script type="module" src="/auto/app.mjs"></script>
+</body></html>

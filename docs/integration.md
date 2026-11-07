@@ -1,4 +1,6 @@
-# Integrating an interface with EIRVIO
+# Advanced: integrating authoritative actions and declared events
+
+For automatic website or Babylon discovery, start with the [adapter quickstart](quickstart.md). This guide covers the optional authoritative host and explicitly declared awareness API, which remain useful for application rules and server-owned state.
 
 The integration has two directions. The application reports what the user is doing, and exposes the actions the agent is allowed to perform. Neither direction depends on a particular model or renderer.
 
@@ -44,6 +46,6 @@ The demo's recovery controls exercise this distinction for both commands and int
 
 ## Adapter responsibilities
 
-A web integration usually wires DOM/framework event handlers and renders projected state. A Babylon.js integration can wire picking and scene interaction callbacks, then map registered actions/effects to scene state and animations. A native app can implement the same JSON contracts through its own bridge. These are application integration points, not bundled adapters in this release.
+A web integration usually wires DOM/framework event handlers and renders projected state. A Babylon.js integration can wire picking and scene interaction callbacks, then map registered actions/effects to scene state and animations. A native app can implement the same JSON contracts through its own bridge. The `installWeb` and `installBabylon` adapters cover common native interactions automatically. Domain actions and effect rendering remain application integration points; see the [quickstart](quickstart.md).
 
 The host adapter owns identity, permissions, domain validation and trusted view updates. The interface adapter owns input instrumentation, current context, rendering and delivery receipts. The agent owns its reasoning/scheduling and chooses from the declared action catalog. This keeps the two directions usable without letting an event or model response become authority by itself.

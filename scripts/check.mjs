@@ -14,6 +14,7 @@ function run(command,args,cwd=root,capture=false) {
 run('npm',['test']);
 run('npm',['run','typecheck']);
 run('npm',['run','demo']);
+run('npm',['run','build:demo']);
 const temporary=await mkdtemp(resolve(tmpdir(),'eirvio package check '));
 try {
   const packed=JSON.parse(run('npm',['pack','--json','--ignore-scripts','--pack-destination',temporary],root,true))[0];
@@ -25,7 +26,7 @@ try {
     }
   }
   // All browser entry modules must remain independent of Node and the host/core.
-  for(const name of ['index.mjs','client.mjs','events.mjs','awareness.mjs']){
+  for(const name of ['index.mjs','client.mjs','events.mjs','awareness.mjs','surface.mjs','web.mjs','babylon.mjs']){
     const source=await readFile(resolve(root,'packages/sdk/src',name),'utf8');
     if(/(?:from\s*|import\s*\()["'][^"']*(?:node:|core\/|host\.mjs)/.test(source))throw new Error(`Browser entry imports host-only code: ${name}`);
   }
@@ -33,9 +34,11 @@ try {
   await writeFile(resolve(consumer,'package.json'),JSON.stringify({private:true,type:'module'}));
   run('npm',['install','--ignore-scripts','--offline','--no-audit','--no-fund',resolve(temporary,packed.filename)],consumer,true);
   await writeFile(resolve(consumer,'consumer.mjs'),`import {createEventStream,createInteractionClient,createInterfaceAwareness} from 'eirvio';
+import {installWeb} from 'eirvio/web';
+import {installBabylon} from 'eirvio/babylon';
 import {createInteractionHost} from 'eirvio/host';
 import {Runtime,Registry,MemoryStore} from 'eirvio/core';
-if([createEventStream,createInteractionClient,createInterfaceAwareness,createInteractionHost,Runtime,Registry,MemoryStore].some(value=>typeof value!=='function'))throw new Error('Missing public export');
+if([createEventStream,createInteractionClient,createInterfaceAwareness,installWeb,installBabylon,createInteractionHost,Runtime,Registry,MemoryStore].some(value=>typeof value!=='function'))throw new Error('Missing public export');
 const stream=createEventStream({catalog:{'test.ready':{properties:{ready:{type:'boolean'}},required:['ready']}}});
 if(stream.track('test.ready',{ready:true}).cursor!==1)throw new Error('Installed SDK failed');
 const awareness=createInterfaceAwareness({events:stream,surface:{id:'consumer',kind:'app'},contextSchema:{properties:{screen:{type:'string'}},required:['screen']},initialContext:{screen:'home'}});

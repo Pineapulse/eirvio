@@ -1,6 +1,6 @@
 {
   "name": "eirvio",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Let agents act in your interface and stay aware of user interactions through declared events and guarded actions.",
   "type": "module",
   "license": "MIT",
@@ -20,7 +20,15 @@
       "types": "./packages/core/src/index.d.mts",
       "import": "./packages/core/src/index.mjs"
     },
-    "./contracts/*": "./packages/core/contracts/*"
+    "./contracts/*": "./packages/core/contracts/*",
+    "./web": {
+      "types": "./packages/sdk/src/web.d.mts",
+      "import": "./packages/sdk/src/web.mjs"
+    },
+    "./babylon": {
+      "types": "./packages/sdk/src/babylon.d.mts",
+      "import": "./packages/sdk/src/babylon.mjs"
+    }
   },
   "files": [
     "packages/sdk/src",
@@ -34,7 +42,9 @@
     "check": "node scripts/check.mjs",
     "demo": "node examples/task-board/demo.mjs",
     "start": "node examples/task-board/server.mjs",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.babylon.json",
+    "build:demo": "node scripts/build-demo.mjs",
+    "prestart": "npm run build:demo"
   },
   "keywords": [
     "agents",
@@ -45,6 +55,9 @@
     "runtime"
   ],
   "devDependencies": {
+    "@babylonjs/core": "8.26.0",
+    "esbuild": "0.25.11",
+    "jsdom": "27.1.0",
     "typescript": "7.0.2"
   },
   "repository": {

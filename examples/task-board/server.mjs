@@ -8,6 +8,7 @@ export function createDemoServer() {
   const {host} = createTaskBoard();
   const root = dirname(fileURLToPath(import.meta.url));
   const sdk = resolve(root, '../../packages/sdk/src');
+  const auto = resolve(root, '../auto-interface');
   const allowedMethods = new Set(['observe', 'catalog', 'submit', 'getOutcome', 'control']);
   const server = http.createServer(async (req, res) => {
     const port = server.address()?.port;
@@ -39,7 +40,8 @@ export function createDemoServer() {
     }
     if (req.method !== 'GET') {res.writeHead(405).end(); return;}
     const url = req.url.split('?')[0];
-    const files = {'/': resolve(root, 'index.html'), '/app.mjs': resolve(root, 'app.mjs'), '/styles.css': resolve(root, 'styles.css')};
+    const files = {'/': resolve(auto, 'index.html'), '/task-board':resolve(root,'index.html'), '/vendor/babylon.mjs':resolve(root,'../../reports/babylon.mjs'), '/app.mjs': resolve(root, 'app.mjs'), '/styles.css': resolve(root, 'styles.css')};
+    for(const name of ['app.mjs','game.mjs','styles.css','tokens.css'])files['/auto/'+name]=resolve(auto,name);
     // SDK modules only; never serve core stores, snapshots, local files or a directory listing.
     if (/^\/sdk\/[a-z][a-z-]*\.mjs$/.test(url)) files[url] = resolve(sdk, url.split('/').at(-1));
     try {
