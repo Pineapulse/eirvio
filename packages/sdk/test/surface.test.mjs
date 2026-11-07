@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createSurfaceAdapter} from '../src/surface.mjs';
+import {createSurfaceAdapter, SURFACE_TOOLS} from '../src/surface.mjs';
 import {InteractionValidationError} from '../src/events.mjs';
 function fixture(options={}) {
   const state={name:'Save',enabled:true,x:0,count:0};
@@ -99,4 +99,124 @@ test('unavailable observation rejects before execution and can be retried only a
 test('even validation-shaped application exceptions after invocation remain uncertain',()=>{
   let count=0;const {adapter,request}=fixture({execute:()=>{count++;throw new InteractionValidationError('INVALID_SCHEMA');}});
   assert.equal(adapter.act(request()).status,'uncertain');assert.equal(count,1);
+});
+
+test('sampling and validation cannot admit another action from the pending revision',()=>{
+  for (const phase of ['sample','validate']) {
+    let adapter, command, nested, armed=false, calls=0;
+    const hook=()=>{if(armed){armed=false;nested=adapter.act({...command,id:'nested'});}};
+    ({adapter}=fixture({
+      sample:()=>{if(phase==='sample')hook();return {targets:[{ref:'button-1',actions:['click'],state:{calls}}]};},
+      validate:()=>{if(phase==='validate')hook();},
+      execute:()=>{calls++;return {status:'dispatched'};}
+    }));
+    try {
+      command={adapterId:adapter.observe().adapterId,id:'outer',revision:0,target:'button-1',action:'click',arguments:{}};
+      armed=true;
+      assert.equal(adapter.act(command).status,'dispatched',phase);
+      assert.equal(nested.code,'SURFACE_BUSY',phase);
+      assert.equal(calls,1,phase);
+      assert.deepEqual(adapter.getOutcome('nested'),nested);
+      assert.equal(adapter.isActing(),false);
+    } finally {adapter.dispose();}
+  }
+});
+
+test('an observation callback cannot recursively sample or dispatch an action',()=>{
+  let adapter, command, nested, recursive, armed=false, calls=0;
+  ({adapter}=fixture({sample:()=>{
+    if(armed){armed=false;nested=adapter.act(command);try{adapter.observe();}catch(error){recursive=error.code;}}
+    return {targets:[{ref:'button-1',actions:['click']}]};
+  },execute:()=>{calls++;return {status:'dispatched'};}}));
+  try {
+    const view=adapter.observe();command={adapterId:view.adapterId,id:'during-observe',revision:view.revision,target:'button-1',action:'click',arguments:{}};
+    armed=true;adapter.observe();
+    assert.equal(nested.code,'SURFACE_BUSY');assert.equal(recursive,'SURFACE_BUSY');assert.equal(calls,0);
+    assert.equal(adapter.act({...command,id:'after-observe'}).status,'dispatched');assert.equal(calls,1);
+  } finally {adapter.dispose();}
+});
+
+test('exact retries during preflight remain pending without invoking again',()=>{
+  let adapter, command, inside, calls=0;
+  ({adapter}=fixture({validate:()=>{inside=adapter.act(command);},execute:()=>{calls++;return {status:'dispatched'};}}));
+  try {
+    command={adapterId:'test-lifetime',id:'preflight-retry',revision:adapter.observe().revision,target:'button-1',action:'click',arguments:{}};
+    assert.equal(adapter.act(command).status,'dispatched');assert.equal(inside.status,'pending');assert.equal(calls,1);
+  } finally {adapter.dispose();}
+});
+
+test('disposal during sampling or validation fences the not-yet-invoked action',()=>{
+  for (const phase of ['sample','validate']) {
+    let adapter, armed=false, calls=0;
+    ({adapter}=fixture({
+      sample:()=>{if(armed&&phase==='sample')adapter.dispose();return {targets:[{ref:'button-1',actions:['click']}]};},
+      validate:()=>{if(phase==='validate')adapter.dispose();},
+      execute:()=>{calls++;return {status:'dispatched'};}
+    }));
+    try {
+      const view=adapter.observe(), command={adapterId:view.adapterId,id:'closing',revision:view.revision,target:'button-1',action:'click',arguments:{}};
+      armed=true;const result=adapter.act(command);
+      assert.equal(result.code,'SURFACE_DISPOSED',phase);assert.equal(result.status,'rejected',phase);assert.equal(calls,0,phase);
+      assert.deepEqual(adapter.act(command),result);assert.equal(adapter.isActing(),false);
+    } finally {adapter.dispose();}
+  }
+});
+
+test('an observation disposed by its sampler never returns a live snapshot',()=>{
+  let adapter;
+  ({adapter}=fixture({sample:()=>{adapter.dispose();return {targets:[]};}}));
+  assert.throws(()=>adapter.observe(),{code:'SURFACE_DISPOSED'});
+});
+
+test('a rejected preflight releases admission for the next independent request',()=>{
+  let blocked=true;
+  const {adapter,state,request}=fixture({validate:()=>{if(blocked)throw new InteractionValidationError('INVALID_ACTION_ARGUMENTS');}});
+  try {
+    assert.equal(adapter.act(request('rejected')).status,'rejected');blocked=false;
+    assert.equal(adapter.act(request('accepted')).status,'dispatched');assert.equal(state.count,1);
+  } finally {adapter.dispose();}
+});
+
+test('semantic state and schemas named sample participate in the revision guard',()=>{
+  for (const location of ['state','schema','root']) {
+    let value='before', calls=0;
+    const adapter=createSurfaceAdapter({kind:'app',adapterId:`semantic-${location}`,
+      sample:()=>({...(location==='root'?{sample:value}:{}),targets:[{ref:'button-1',actions:['click'],sample:{x:0},
+        ...(location==='state'?{state:{sample:value}}:{}),
+        ...(location==='schema'?{actionSchemas:{click:{type:'object',properties:{sample:{type:'string',enum:[value]}}}}}:{})}]}),
+      execute:()=>{calls++;return {status:'dispatched'};}});
+    try {
+      const before=adapter.observe();value='after';
+      assert.equal(adapter.observe().revision,before.revision+1,location);
+      const result=adapter.act({adapterId:before.adapterId,id:'stale',revision:before.revision,target:'button-1',action:'click',arguments:{}});
+      assert.equal(result.code,'STALE_SURFACE',location);assert.equal(calls,0,location);
+    } finally {adapter.dispose();}
+  }
+});
+
+test('history pages valid large and node-heavy events without losing cursors',()=>{
+  for (const payload of ['x'.repeat(15000),Array(950).fill(0)]) {
+    const {adapter}=fixture();
+    try {
+      for(let index=0;index<100;index++)adapter.record({type:'large',actor:'user',payload});
+      const first=adapter.history();
+      assert.ok(first.events.length>0&&first.events.length<100);assert.equal(first.hasMore,true);assert.equal(first.gap,false);
+      const cursors=first.events.map(event=>event.cursor);let page=first;
+      while(page.hasMore){page=adapter.history({after:page.nextCursor});cursors.push(...page.events.map(event=>event.cursor));}
+      assert.deepEqual(cursors,Array.from({length:100},(_,index)=>index+1));assert.equal(page.nextCursor,100);
+      first.events[0].payload='mutated';assert.deepEqual(adapter.history({limit:1}).events[0].payload,payload);
+      assert.equal(adapter.observe().activity.events.length,20);
+    } finally {adapter.dispose();}
+  }
+});
+
+test('exported tool templates are deeply immutable and cannot poison later instances',()=>{
+  assert.throws(()=>{SURFACE_TOOLS[0].name='poisoned';},TypeError);
+  assert.throws(()=>{SURFACE_TOOLS[1].parameters.properties.id.minLength=0;},TypeError);
+  assert.throws(()=>{SURFACE_TOOLS[1].parameters.required.pop();},TypeError);
+  const {adapter}=fixture();
+  try {
+    assert.equal(adapter.tools[0].name,'surface_observe');assert.equal(adapter.tools[1].parameters.properties.id.minLength,1);
+    assert.equal(adapter.callTool(adapter.tools[0].name,{}).adapterId,adapter.observe().adapterId);
+  } finally {adapter.dispose();}
 });

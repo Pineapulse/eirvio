@@ -5,10 +5,10 @@ Install EIRVIO into the application you control, then connect its JSON observati
 ## Install
 
 ```sh
-npm install github:Pineapulse/eirvio#v0.3.0
+npm install github:Pineapulse/eirvio#v0.3.1
 ```
 
-This command targets the v0.3.0 Git release. EIRVIO has not been published to the npm registry. Use a browser application with an ESM-capable build setup; these package imports are not CDN script URLs.
+This command targets the v0.3.1 Git release. EIRVIO has not been published to the npm registry. Use a browser application with an ESM-capable build setup; these package imports are not CDN script URLs.
 
 For a website, run after the body exists:
 

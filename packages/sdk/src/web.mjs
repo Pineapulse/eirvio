@@ -39,7 +39,8 @@ export function installWeb(options = {}) {
     if (autocomplete.split(/\s+/).some(token => /^(?:current-password|new-password|one-time-code|cc-.+)$/.test(token))) return true;
     if (['SCRIPT','STYLE','TEMPLATE','NOSCRIPT','HEAD','CANVAS','IFRAME','OBJECT','EMBED'].includes(element.tagName)) return true;
     const style = window.getComputedStyle(element);
-    return style.display === 'none' || ['hidden','collapse'].includes(style.visibility) || style.opacity === '0';
+    return style.display === 'none' || style.contentVisibility === 'hidden'
+      || ['hidden','collapse'].includes(style.visibility) || style.opacity === '0';
   }
   function excluded(element) {
     if (!inRoot(element) || !element.isConnected) return true;

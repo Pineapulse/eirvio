@@ -9,10 +9,10 @@ Give your agent structured eyes and actions inside your website or Babylon.js ga
 ## Install in a website
 
 ```sh
-npm install github:Pineapulse/eirvio#v0.3.0
+npm install github:Pineapulse/eirvio#v0.3.1
 ```
 
-GitHub is the release channel. EIRVIO is **not published to the npm registry**. This installation targets the v0.3.0 Git release.
+GitHub is the release channel. EIRVIO is **not published to the npm registry**. This installation targets the v0.3.1 Git release.
 
 Run this in your browser application after the page body exists:
 
@@ -100,3 +100,7 @@ npm start
 Open [localhost:8810](http://127.0.0.1:8810/) for automatic website discovery and the Babylon scene demonstration. Startup builds the local Babylon demo bundle from the development dependencies. The [advanced task board](http://127.0.0.1:8810/task-board) demonstrates explicit awareness, guarded actions and lost-reply recovery. These demos use scripted agents and need no model credentials; `npm run demo` runs the advanced terminal example.
 
 See [provenance](docs/provenance.md), [security](SECURITY.md) and [contributing](CONTRIBUTING.md).
+
+## Test and improve the engine
+
+From a repository checkout, run `npm run lab:test` for isolated scenario checks, `npm run lab:learn` to compare the published v0.3.0 baseline with your current engine, and `npm run lab:serve` to open the testing environment on port 8811 and learning environment on port 8812. The learning comparison retains reproducible failures and measured improvements; it does not train a model. See the [lab guide](docs/testing.md) and [learning log](docs/learning-log.md).

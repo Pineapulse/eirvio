@@ -15,6 +15,7 @@ run('npm',['test']);
 run('npm',['run','typecheck']);
 run('npm',['run','demo']);
 run('npm',['run','build:demo']);
+run('npm',['run','lab:test']);
 const temporary=await mkdtemp(resolve(tmpdir(),'eirvio package check '));
 try {
   const packed=JSON.parse(run('npm',['pack','--json','--ignore-scripts','--pack-destination',temporary],root,true))[0];

@@ -55,6 +55,18 @@ test('privacy pruning applies to ancestor text, ARIA references, labels, options
   assert.equal(adapter.observe().targets.some(target=>target.state?.inputType==='password'),false);
 });
 
+test('dynamic content-visibility:hidden prunes descendants, ancestor labels and activity before acting', t => {
+  const {adapter,document,window}=setup(t,'<li id="panel"><label>Notes<input value="Public"></label><span>Public detail</span></li>');
+  const planned=request(adapter,'Notes','fill',{value:'Agent update'}), panel=document.querySelector('#panel'), input=document.querySelector('input');
+  panel.style.contentVisibility='hidden';input.value='SYNTHETIC_PRIVATE_VALUE';document.querySelector('span').textContent='SYNTHETIC_PRIVATE_LABEL';
+  assert.equal(window.getComputedStyle(panel).contentVisibility,'hidden');
+  const hidden=adapter.observe();assert.deepEqual(hidden.targets,[]);
+  assert.equal(adapter.act(planned).code,'STALE_SURFACE');assert.equal(input.value,'SYNTHETIC_PRIVATE_VALUE');
+  const before=adapter.history().cursor;input.dispatchEvent(new window.Event('input',{bubbles:true}));assert.equal(adapter.history().cursor,before);
+  panel.style.contentVisibility='visible';input.value='Public again';document.querySelector('span').textContent='Public detail';
+  assert.equal(adapter.act(request(adapter,'Notes','fill',{value:'Allowed now'})).status,'dispatched');assert.equal(input.value,'Allowed now');
+});
+
 test('direct value, checked and disabled changes stale old requests synchronously', t => {
   const {adapter,document}=setup(t,'<label>Name<input value="before"></label><label><input type="checkbox">Ready</label><button>Go</button>');
   const fill=request(adapter,'Name','fill',{value:'agent'});document.querySelector('input').value='human';

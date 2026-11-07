@@ -1,6 +1,6 @@
 {
   "name": "eirvio",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Let agents act in your interface and stay aware of user interactions through declared events and guarded actions.",
   "type": "module",
   "license": "MIT",
@@ -44,7 +44,10 @@
     "start": "node examples/task-board/server.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.babylon.json",
     "build:demo": "node scripts/build-demo.mjs",
-    "prestart": "npm run build:demo"
+    "prestart": "npm run build:demo",
+    "lab:test": "node lab/run.mjs testing",
+    "lab:learn": "node lab/run.mjs learning",
+    "lab:serve": "node lab/server.mjs"
   },
   "keywords": [
     "agents",

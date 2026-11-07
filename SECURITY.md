@@ -1,6 +1,6 @@
 # Security
 
-EIRVIO 0.3.0 is an early, in-memory runtime and SDK. It is not an authentication service or a hardened multi-tenant backend. Applications own verified identity, authorization policy, transport isolation, rate limits, storage retention and appropriate data handling.
+EIRVIO 0.3.1 is an early, in-memory runtime and SDK. It is not an authentication service or a hardened multi-tenant backend. Applications own verified identity, authorization policy, transport isolation, rate limits, storage retention and appropriate data handling.
 
 Treat agent output, UI events, event actor labels and transported JSON as untrusted input. Only trusted host code supplies permission contexts. Domain reducers and projectors are trusted synchronous code, not a sandbox. Never accept arbitrary reducer code, expose `admin: true`, publish private replay artifacts, or convert a tracked event directly into permission to act.
 
